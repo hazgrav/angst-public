@@ -1,0 +1,176 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=61" ]
+
+[project]
+name = "angst"
+version = "0.0.0"
+description = "AGN Next Generation Survey Toolkit"
+readme = "README.md"
+keywords = [ "python" ]
+authors = [ { name = "David Wright", email = "dcw3.dev@gmail.com" } ]
+requires-python = ">=3.11,<4.0"
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "arviz>=0.17.1",
+  "astropy>=6.0.1",
+  "equinox>=0.11.10",
+  "fsspec>=2024.12",
+  "graphviz>=0.20.3",
+  "jax>=0.4.30",
+  "jaxopt>=0.8.0",
+  "loguru>=0.7.3",
+  "nested-pandas>=0.6",
+  "numpyro>=0.16.1",
+  "optimistix>=0.0.11",
+  "quadax>=0.2.11",
+  "s3fs>=2025.9",
+  "tinygp>=0.3",
+  "universal-pathlib>=0.2.6",
+]
+
+optional-dependencies.cuda = [
+  "jax[cuda]; sys_platform=='linux'",
+]
+urls.Documentation = "https://hazgrav.github.io/angst/"
+urls.Homepage = "https://hazgrav.github.io/angst/"
+urls.Repository = "https://github.com/hazgrav/angst"
+
+[dependency-groups]
+dev = [
+  "deptry>=0.20",
+  "mkdocs>=1.4.2",
+  "mkdocs-gen-files>=0.5",
+  "mkdocs-jupyter>=0.25.1",
+  "mkdocs-material>=8.5.10",
+  "mkdocstrings[python]>=0.26.1",
+  "mypy>=0.991",
+  "pre-commit>=2.20",
+  "pytest>=7.2",
+  "pytest-cov>=4",
+  "ruff>=0.6.9",
+  "shellcheck-py>=0.10.0.1",
+  "tox-uv>=1.11.3",
+  "traitlets>=5.14.3",
+  "typeguard>=4.4.1",
+]
+jupyter = [
+  "ipykernel>=6.29.5",
+  "ipywidgets>=8.1.5",
+  "jldracula>=0.2",
+  "jupyterlab>=4.3.4",
+  "jupyterlab-code-formatter>=3.0.2",
+  "jupyterlab-lsp>=5.1",
+  "jupyterlab-vim>=4.1.4",
+  "python-lsp-server[all]>=1.12",
+  "ruff>=0.9.3",
+]
+examples = [
+  "astroquery>=0.4.11",
+  "blackjax>=1.2.5",
+  "lsdb",
+  "hats",
+]
+
+[tool.setuptools.packages.find]
+where = [ "src" ]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = [ "src", "tests" ]
+
+fix = true
+format.preview = true
+lint.select = [
+  # flake8-builtins
+  "A",
+  # flake8-bugbear
+  "B",
+  # flake8-comprehensions
+  "C4",
+  # mccabe
+  "C90",
+  # pycodestyle
+  "E",
+  # pyflakes
+  "F",
+  # isort
+  "I",
+  # pygrep-hooks
+  "PGH",
+  # ruff
+  "RUF",
+  # flake8-bandit
+  "S",
+  # flake8-simplify
+  "SIM",
+  # flake8-debugger
+  "T10",
+  # tryceratops
+  "TRY",
+  # pyupgrade
+  "UP",
+  "W",
+  # flake8-2020
+  "YTT",
+]
+lint.ignore = [
+  # LineTooLong
+  "E501",
+  # DoNotAssignLambda
+  "E731",
+]
+lint.per-file-ignores."tests/*" = [ "S101" ]
+
+[tool.pytest.ini_options]
+addopts = "--color=yes --doctest-modules --exitfirst --failed-first --strict-config --strict-markers --typeguard-packages=angst --verbosity=2 --junitxml=reports/pytest.xml"
+filterwarnings = [ "error", "ignore::DeprecationWarning" ]
+testpaths = [ "src", "tests" ]
+xfail_strict = true
+
+[tool.coverage.report]
+fail_under = 50
+precision = 1
+show_missing = true
+skip_covered = true
+skip_empty = true
+
+[tool.coverage.xml] # https://coverage.readthedocs.io/en/latest/config.html#xml
+output = "reports/coverage.xml"
+
+[tool.coverage.run]
+branch = true
+command_line = "--module pytest"
+data_file = "reports/.coverage"
+source = [ "src" ]
+
+[tool.mypy]
+junit_xml = "reports/mypy.xml"
+strict = true
+disallow_subclassing_any = false
+disallow_untyped_decorators = false
+ignore_missing_imports = true
+pretty = true
+show_column_numbers = true
+show_error_context = true
+warn_unreachable = true
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[tool.uv.sources]
+blackjax = { git = "https://github.com/handley-lab/blackjax" }
